@@ -1,0 +1,190 @@
+<html>
+
+<head>
+    <title>Pie</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src=" https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+
+
+    <script src="d3-lasso.min.js"></script>
+    <script src="common.js"></script>
+    <script src="util.js"></script>
+    <script src="legend_barcharts.js"></script>
+
+    <script src="table - pivot.js"></script>
+
+
+
+    <style>
+        body {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+        }
+
+        th {
+            text-align: center;
+            background-color: rgb(241, 241, 241);
+            font-weight: bold;
+            width: 103px;
+        }
+
+
+        @font-face {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+            font-style: normal;
+            font-weight: 300;
+            src: local("Fira Sans Extra Condensed Light"), local("FiraSans-Light"), url(font/FiraSansExtraCondensed-Light.ttf);
+        }
+
+        @font-face {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+            font-style: normal;
+            font-weight: 400;
+            src: local("Fira Sans Extra Condensed"), local("FiraSans"), url(font/FiraSansExtraCondensed-Regular.ttf);
+        }
+
+        @font-face {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+            font-style: normal;
+            font-weight: 600;
+            src: local("Fira Sans Extra Condensed"), local("FiraSans-Semibold"), url(font/FiraSansExtraCondensed-SemiBold.ttf);
+        }
+
+        @font-face {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+            font-style: normal;
+            font-weight: 700;
+            src: local("Fira Sans Extra Condensed"), local("FiraSans-Bold"), url(font/FiraSansExtraCondensed-Bold.ttf);
+        }
+
+        table {
+            font-size: 9px;
+        }
+
+        /* width */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="header"
+        style="text-align:center; width:100%; margin: 0 auto; display:block; padding-top:5px; height:60px; margin-bottom:35px;">
+        <h1 style="color:#777; font-weight:100;">Pivot Table </h1>
+    </div>
+    <div style="position: relative; border: 1px solid #999;height: 400px;width: 700px;">
+        <div id="pivottable" width="700" height="400">
+
+        </div>
+
+
+    </div>
+    <script type="text/javascript">
+        /* Global variable accessible from anywhere */
+        var COMMON = common(),
+            UTIL = util()
+        LEGEND = legend();
+
+        var config = {
+            dimension: ['State', 'Under 5 Years'],
+            forEachDimension: [{
+                "dimension": "State",
+                "displayName": "State Name",
+                "cellColor": "#efefef",
+                "fontStyle": "italic",
+                "fontWeight": "900",
+                "fontSize": "15",
+                "textColor": "#ff00ff",
+                "textColorExpression": "",
+                "textAlignment": "center",
+                isPivoted:true
+            },
+            {
+                "dimension": "Under 5 Years",
+                "displayName": "Under 5 Years",
+                "cellColor": "",
+                "fontStyle": "bold",
+                "fontWeight": "200",
+                "fontSize": "12",
+                "textColor": "",
+                "textColorExpression": "",
+                "textAlignment": "left",
+                isPivoted:false
+            }
+            ],
+            measure: ['5 to 13 Years', '14 to 17 Years'],
+            "forEachMeasure": [{
+                "measure": "5 to 13 Years",
+                "displayName": "5 to 13 Years",
+                "cellColor": "#ababab",
+                "cellColorExpression": "",
+                "fontStyle": "bold",
+                "fontSize": "#e06a6a",
+                "numberFormat": "K",
+                "textColor": "#eaeaea",
+                "textAlignment": "left",
+                "textColorExpression": "",
+                "iconName": "fa fa-plus",
+                "iconPosition": "right",
+                "iconExpression": ""
+            }
+                , {
+                "measure": "14 to 17 Years",
+                "displayName": "14 to 17 Years",
+                "cellColor": "#fefefe",
+                "cellColorExpression": "",
+                "fontStyle": "bold",
+                "fontSize": "#e06a6a",
+                "numberFormat": "K",
+                "textColor": "",
+                "textAlignment": "left",
+                "textColorExpression": "",
+                "iconName": "fa fa-plus",
+                "iconPosition": "right",
+                "iconExpression": ""
+            }
+
+            ]
+        }
+
+        var chart = table()
+            .config(config);
+
+        d3.csv('datatable.csv', function (data) {
+            d3.select('#pivottable')
+                .datum(data)
+                .call(chart);
+        });
+
+
+    </script>
+</body>
+
+</html>
